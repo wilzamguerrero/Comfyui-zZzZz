@@ -1,6 +1,5 @@
 import os
 import zipfile
-import webbrowser
 
 class CompressFolderNode:
     @classmethod
@@ -62,9 +61,6 @@ class CompressFolderNode:
             else:
                 print(f"Error: The path {path} is neither a file nor a folder.")
                 return None
-
-            # Abrir el archivo ZIP en el navegador para descargar
-            webbrowser.open(f"file://{os.path.abspath(zip_filepath)}")
 
             return ()  # No necesitamos retornar nada
 
