@@ -9,6 +9,9 @@ class DownloadFileNode:
             "required": {
                 "url": ("STRING", {"tooltip": "The URL of the file to download."}),
                 "path": ("STRING", {"tooltip": "The path where the file will be saved."}),
+            },
+            "optional": {
+                "custom_name": ("STRING", {"tooltip": "Custom name for the downloaded file (optional). If not provided, the original file name will be used."}),
             }
         }
 
@@ -17,7 +20,7 @@ class DownloadFileNode:
     CATEGORY = "download"
     OUTPUT_NODE = True
 
-    def download_file(self, url, path):
+    def download_file(self, url, path, custom_name=None):
         # Validación de inputs
         if url is None or path is None:
             print("Error: URL or path is None. Please check the inputs.")
@@ -30,13 +33,16 @@ class DownloadFileNode:
         try:
             response = requests.get(url, stream=True)
             response.raise_for_status()  # Raise an exception for HTTP errors
-            filename = os.path.basename(url)
+            
+            # Obtener el nombre del archivo de la URL
+            filename = custom_name if custom_name else os.path.basename(url)
             filepath = os.path.join(path, filename)
 
             # Verificar si el directorio existe
             if not os.path.exists(path):
                 os.makedirs(path)
 
+            # Descargar el archivo
             with open(filepath, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
