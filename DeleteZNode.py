@@ -1,7 +1,7 @@
 import os
 import shutil
 
-class DeleteFileOrFolderNode:
+class DeleteZNode:
     @classmethod
     def INPUT_TYPES(s):
         return {
