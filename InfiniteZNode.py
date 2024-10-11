@@ -8,7 +8,8 @@ class InfiniteZNode:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "port": ("STRING", {"default": "7888"})
+                "port": ("STRING", {"default": "7888"}),
+                "tunnel_url": ("STRING", {"default": ""}),  # Nueva opción para la URL del túnel
             }
         }
 
@@ -17,12 +18,12 @@ class InfiniteZNode:
     CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
-    def execute_infinite_browser(self, port):
+    def execute_infinite_browser(self, port, tunnel_url=""):
         try:
-            # Definir la ruta del nodo y subir dos niveles
+            # Ruta al archivo app.py
             node_path = os.path.dirname(os.path.abspath(__file__))
-            root_path = os.path.abspath(os.path.join(node_path, "..", ".."))  # Subir dos niveles
-            app_py_path = os.path.join(root_path, "app.py")  # app.py en la raíz
+            root_path = os.path.abspath(os.path.join(node_path, "..", "..", ".."))  # Subir tres niveles
+            app_py_path = os.path.join(root_path, "app.py")
 
             if not os.path.exists(app_py_path):
                 print(f"Error: {app_py_path} no existe.")
@@ -32,7 +33,13 @@ class InfiniteZNode:
 
             # Ejecutar app.py desde la raíz
             subprocess.Popen([python_command, app_py_path, f"--port={port}"], cwd=root_path)
-            webbrowser.open_new_tab(f"http://localhost:{port}")
+
+            # Si se proporcionó una URL de túnel, usarla
+            if tunnel_url:
+                webbrowser.open_new_tab(f"{tunnel_url}")
+            else:
+                webbrowser.open_new_tab(f"http://localhost:{port}")
+
             return ()
         except Exception as e:
             print(f"Error: {e}")
