@@ -14,7 +14,7 @@ class MoveZNode:
 
     RETURN_TYPES = ()  # Sin salidas explícitas, ya que solo movemos archivos o carpetas
     FUNCTION = "move_file_or_folder"
-    CATEGORY = "file_operations"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def move_file_or_folder(self, source, destination, folder_name):
