@@ -12,7 +12,7 @@ class CreateZNode:
 
     RETURN_TYPES = ()  # No hay salidas explícitas
     FUNCTION = "create_folder"
-    CATEGORY = "file_operations"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def create_folder(self, path, folder_name):
