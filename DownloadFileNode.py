@@ -17,7 +17,7 @@ class DownloadFileNode:
 
     RETURN_TYPES = ()  # Asegúrate de que no haya RETURN_TYPES si no hay outputs
     FUNCTION = "download_file"
-    CATEGORY = "download"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def download_file(self, url, path, custom_name=None):
