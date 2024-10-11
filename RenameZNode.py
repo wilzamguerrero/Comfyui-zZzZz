@@ -12,7 +12,7 @@ class RenameZNode:
 
     RETURN_TYPES = ()  # Sin salidas explícitas, ya que solo renombramos archivos o carpetas
     FUNCTION = "rename_file_or_folder"
-    CATEGORY = "file_operations"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def rename_file_or_folder(self, source_path, new_name):
