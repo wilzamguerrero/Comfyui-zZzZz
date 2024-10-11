@@ -12,7 +12,7 @@ class DeleteZNode:
 
     RETURN_TYPES = ()  # Sin salidas explícitas, ya que solo eliminamos archivos o carpetas
     FUNCTION = "delete_file_or_folder"
-    CATEGORY = "file_operations"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def delete_file_or_folder(self, target_path):
