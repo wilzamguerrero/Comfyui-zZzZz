@@ -12,7 +12,7 @@ class CompressFolderNode:
 
     RETURN_TYPES = ()  # Sin salidas explícitas ya que solo comprimimos la carpeta o archivo
     FUNCTION = "compress_folder_or_file"
-    CATEGORY = "compression"
+    CATEGORY = "zZzZz"
     OUTPUT_NODE = True
 
     def compress_folder_or_file(self, path):
