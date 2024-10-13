@@ -38,17 +38,15 @@ class InfiniteZNode:
 
     def execute_infinite_browser(self, port, tunnel_option="LocalTunnel"):
         try:
-            node_path = os.path.dirname(os.path.abspath(__file__))
-            root_path = os.path.abspath(os.path.join(node_path, "..", ".."))
-            app_py_path = os.path.join(root_path, "app.py")
-
+            app_py_path = "/kaggle/working/SDZC/app.py"
+    
             if not os.path.exists(app_py_path):
                 error_message = f"Error: {app_py_path} no existe."
                 print(error_message)
                 return (error_message,)
-
+    
             python_command = "python" if platform.system() == "Windows" else "python3"
-            subprocess.Popen([python_command, app_py_path, f"--port={port}"], cwd=root_path)
+            subprocess.Popen([python_command, app_py_path, f"--port={port}"], cwd="/kaggle/working/SDZC")
 
             if tunnel_option == "LocalTunnel":
                 return self.local_tunnel(port)
