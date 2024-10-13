@@ -13,7 +13,6 @@ from threading import Timer
 from queue import Queue
 from multiprocessing import Process
 
-base_path = "/content/SDZC"
 
 class InfiniteZNode:
     @classmethod
