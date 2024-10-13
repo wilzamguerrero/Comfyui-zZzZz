@@ -13,6 +13,8 @@ from threading import Timer
 from queue import Queue
 from multiprocessing import Process
 
+base_path = "/content/SDZC"
+
 class InfiniteZNode:
     @classmethod
     def INPUT_TYPES(s):
@@ -25,7 +27,7 @@ class InfiniteZNode:
                     "step": 1,        
                     "display": "number"  
                 }),
-                "tunnel_option": (["LocalTunnel", "Serveo", "Cloudflare", "Zrok", "Localhost"], {"default": "LocalTunnel"})
+                "tunnel_option": (["LocalTunnel", "Serveo", "Cloudflare", "Zrok", "Localhost", "Pinggy"], {"default": "LocalTunnel"})
             }
         }
 
@@ -57,6 +59,8 @@ class InfiniteZNode:
                 return self.cloudflare_tunnel(port)
             elif tunnel_option == "Zrok":
                 return self.zrok_tunnel(port)
+            elif tunnel_option == "Pinggy":
+                return self.pinggy_tunnel(port)
             elif tunnel_option == "Localhost":
                 return self.localhost_tunnel(port)  
             else:
@@ -152,13 +156,12 @@ class InfiniteZNode:
             output_queue.put(tunnel_url)
 
         output_queue = Queue()
-        metrics_port = randint(8100, 9000)  # Puerto aleatorio para métricas de Cloudflare
+        metrics_port = randint(8100, 9000) 
         thread = Timer(2, run_cloudflared, args=(port, metrics_port, output_queue))
         thread.start()
         thread.join()
         tunnel_url = output_queue.get()
 
-        # Imprimir y retornar la URL pública generada por Cloudflare
         print(f"URL Pública de Cloudflare: {tunnel_url}")
         return (f"URL: {tunnel_url}",)
 
@@ -172,11 +175,63 @@ class InfiniteZNode:
             cmd = f'{command} & /content/SDZC/zrok share public http://localhost:{port} --headless'
             subprocess.Popen(cmd, shell=True)
         
-            return ("Revisa el output",)
+            return ("Revisa el output para la URL de Zrok",)
 
         except Exception as e:
             error_message = f"Error: {e}"
             print(error_message)
             return (error_message,)
+
+
+    def pinggy_tunnel(self, port):
+        try:
+            log_file = 'log.txt'
+            open(log_file, 'w').close()
+
+            def run_app():
+                cmd = f"python /content/SDZC/app.py & ssh -o StrictHostKeyChecking=no -p 80 -R0:localhost:{port} a.pinggy.io"
+                with open(log_file, 'w') as log:
+                    process = subprocess.Popen(cmd, shell=True, stdout=log, stderr=subprocess.STDOUT)
+                    process.wait()
+                    
+            def print_url():
+                time.sleep(2)
+                
+                found = False
+                while not found:
+                    with open(log_file, 'r') as file:
+                        end_word = '.pinggy.link'
+                        for line in file:
+                            start_index = line.find("http:")
+                            if start_index != -1:
+                                end_index = line.find(end_word, start_index)
+                                if end_index != -1:
+                                    url = line[start_index:end_index + len(end_word)]
+                                    print(f"URL de Pinggy: {url}")
+                                    found = True
+                    if not found:
+                        time.sleep(2)
+                    
+            p_app = Process(target=run_app)
+            p_url = Process(target=print_url)
+
+            p_app.start()
+            p_url.start()
+
+            return ("Revisa el output para la URL de Pinggy",)
+
+        except Exception as e:
+            error_message = f"Error: {e}"
+            print(error_message)
+            return (error_message,)
+
+
+
+
+
+
+
+
+
 
 
