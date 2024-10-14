@@ -54,7 +54,7 @@ class InfiniteZNode:
                 return self.local_tunnel(port)
             elif tunnel_option == "Serveo":
                 return self.serveo_tunnel(port)
-            elif tunnel_option == "Cloudf":
+            elif tunnel_option == "Cloudfl":
                 return self.cloudfl_tunnel(port)
             elif tunnel_option == "Zrok":
                 return self.zrok_tunnel(port)
