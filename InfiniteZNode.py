@@ -20,7 +20,7 @@ class InfiniteZNode:
         return {
             "required": {
                 "port": ("INT", {
-                    "default": 9001,  
+                    "default": 8001,  
                     "min": 1000,      
                     "max": 999999,      
                     "step": 1,        
@@ -132,7 +132,7 @@ class InfiniteZNode:
 
 
     def cloudfl_tunnel(self, port):
-        def run_cloudflared(port, metrics_port, output_queue):
+        def run_cloudfl(port, metrics_port, output_queue):
           
             atexit.register(lambda p: p.terminate(), subprocess.Popen(
                 ['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'],
@@ -154,8 +154,8 @@ class InfiniteZNode:
             output_queue.put(tunnel_url)
 
         output_queue = Queue()
-        metrics_port = randint(1000, 999999) 
-        thread = Timer(2, run_cloudflared, args=(port, metrics_port, output_queue))
+        metrics_port = randint(8100, 9000) 
+        thread = Timer(2, run_cloudfl, args=(port, metrics_port, output_queue))
         thread.start()
         thread.join()
         tunnel_url = output_queue.get()
