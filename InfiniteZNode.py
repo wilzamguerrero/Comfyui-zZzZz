@@ -21,7 +21,7 @@ class InfiniteZNode:
             "required": {
                 "port": ("INT", {
                     "default": 9001,  
-                    "min": 1,      
+                    "min": 1000,      
                     "max": 999999,      
                     "step": 1,        
                     "display": "number"  
@@ -154,7 +154,7 @@ class InfiniteZNode:
             output_queue.put(tunnel_url)
 
         output_queue = Queue()
-        metrics_port = randint(8100, 9000) 
+        metrics_port = randint(1000, 999999) 
         thread = Timer(2, run_cloudflared, args=(port, metrics_port, output_queue))
         thread.start()
         thread.join()
