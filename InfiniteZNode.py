@@ -131,41 +131,37 @@ class InfiniteZNode:
         return (f"URL: {public_url}",)
 
 
-
     def cloudfl_tunnel(self, port):
         def run_cloudflared(port, metrics_port, output_queue):
-            part1 = "tryclou"
-            part2 = "dfl"
-            part3 = "are"
-            
-            full_url = part1 + part2 + part3 + ".com"
-
-            atexit.register(lambda p: p.terminate(), subprocess.Popen(['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT))
-
+          
+            atexit.register(lambda p: p.terminate(), subprocess.Popen(
+                ['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'],
+                stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+            ))
             attempts, tunnel_url = 0, None
             while attempts < 10 and not tunnel_url:
                 attempts += 1
                 time.sleep(3)
                 try:
-                    tunnel_url = re.search(f"(?P<url>https?:\/\/[^\s]+.{full_url})", requests.get(f'http://127.0.0.1:{metrics_port}/metrics').text).group("url")
+                    metrics = requests.get(f'http://127.0.0.1:{metrics_port}/metrics').text
+                    tunnel_url = re.search(r"(?P<url>https?:\/\/[^\s]+.trycloudflare.com)", metrics).group("url")
                 except Exception as e:
+                    print(f"Intento {attempts}: no se pudo obtener la URL - {e}")
                     pass
 
             if not tunnel_url:
-                raise Exception("Can't connect to CloudF")
+                raise Exception("No se pudo conectar a Cloudflare Edge")
             output_queue.put(tunnel_url)
 
         output_queue = Queue()
-        metrics_port = randint(1000, 999999) 
+        metrics_port = randint(8100, 9000) 
         thread = Timer(2, run_cloudflared, args=(port, metrics_port, output_queue))
         thread.start()
         thread.join()
         tunnel_url = output_queue.get()
 
-        print(f"URL Pública de Cloudfl: {tunnel_url}")
+        print(f"URL Pública de Cloudflare: {tunnel_url}")
         return (f"URL: {tunnel_url}",)
-
-
 
     def zrok_tunnel(self, port):
         try:
