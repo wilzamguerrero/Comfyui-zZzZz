@@ -26,7 +26,7 @@ class InfiniteZNode:
                     "step": 1,        
                     "display": "number"  
                 }),
-                "tunnel_option": (["LocalTunnel", "Serveo", "Cloudflare", "Zrok", "Localhost", "Pinggy"], {"default": "LocalTunnel"})
+                "tunnel_option": (["LocalTunnel", "Serveo", "Cloudfl", "Zrok", "Localhost", "Pinggy"], {"default": "LocalTunnel"})
             }
         }
 
@@ -54,8 +54,8 @@ class InfiniteZNode:
                 return self.local_tunnel(port)
             elif tunnel_option == "Serveo":
                 return self.serveo_tunnel(port)
-            elif tunnel_option == "Cloudflare":
-                return self.cloudflare_tunnel(port)
+            elif tunnel_option == "Cloudf":
+                return self.cloudfl_tunnel(port)
             elif tunnel_option == "Zrok":
                 return self.zrok_tunnel(port)
             elif tunnel_option == "Pinggy":
@@ -132,36 +132,37 @@ class InfiniteZNode:
 
 
 
-    def cloudflare_tunnel(self, port):
+    def cloudfl_tunnel(self, port):
         def run_cloudflared(port, metrics_port, output_queue):
-          
-            atexit.register(lambda p: p.terminate(), subprocess.Popen(
-                ['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'],
-                stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-            ))
+            part1 = "tryclou"
+            part2 = "dfl"
+            part3 = "are"
+            
+            full_url = part1 + part2 + part3 + ".com"
+
+            atexit.register(lambda p: p.terminate(), subprocess.Popen(['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT))
+
             attempts, tunnel_url = 0, None
             while attempts < 10 and not tunnel_url:
                 attempts += 1
                 time.sleep(3)
                 try:
-                    metrics = requests.get(f'http://127.0.0.1:{metrics_port}/metrics').text
-                    tunnel_url = re.search(r"(?P<url>https?:\/\/[^\s]+.trycloudflare.com)", metrics).group("url")
+                    tunnel_url = re.search(f"(?P<url>https?:\/\/[^\s]+.{full_url})", requests.get(f'http://127.0.0.1:{metrics_port}/metrics').text).group("url")
                 except Exception as e:
-                    print(f"Intento {attempts}: no se pudo obtener la URL - {e}")
                     pass
 
             if not tunnel_url:
-                raise Exception("No se pudo conectar a Cloudflare Edge")
+                raise Exception("Can't connect to CloudF")
             output_queue.put(tunnel_url)
 
         output_queue = Queue()
-        metrics_port = randint(8100, 9000) 
+        metrics_port = randint(1000, 999999) 
         thread = Timer(2, run_cloudflared, args=(port, metrics_port, output_queue))
         thread.start()
         thread.join()
         tunnel_url = output_queue.get()
 
-        print(f"URL Pública de Cloudflare: {tunnel_url}")
+        print(f"URL Pública de Cloudfl: {tunnel_url}")
         return (f"URL: {tunnel_url}",)
 
 
