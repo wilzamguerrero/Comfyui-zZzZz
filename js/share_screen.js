@@ -682,7 +682,7 @@ app.registerExtension({
               top: "0", // Parte superior relativa al nodo
               cursor: "pointer",
               position: "absolute",
-              z-index: "10000",
+              zIndex: 10000,
               maxWidth: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
               width: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
           });
