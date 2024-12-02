@@ -1,0 +1,5 @@
+chardet
+pyyaml
+torch
+numpy
+Pillow
