@@ -11,6 +11,7 @@ const WIDGET_NAME_REFRESH_DURATION = "Refresh Duration";
 const WIDGET_NAME_START_QUEUE = "Start Queue";
 const WIDGET_NAME_PREVIEW = "preview";
 
+
 const runtime = {
   screen: {
     // [nodeId]: {
@@ -47,10 +48,10 @@ const runtime = {
     }
 
     if (this.live > 0) {
-      console.info("[zZzZz] other node is living: ", id);
+      console.info("[zfkun 🍕🅩🅕] other node is living: ", id);
       return Promise.resolve(false);
     }
-    console.info("[zZzZz] start queue: ", id, this.live);
+    console.info("[zfkun 🍕🅩🅕] start queue: ", id, this.live);
 
     const duration =
       app.graph._nodes_by_id[id]?.widgets?.find?.(
@@ -71,7 +72,7 @@ const runtime = {
           const img2 = await runtime.loadImage(currentFrame);
 
           const apd = runtime.averagePixelDifference(img1, img2);
-          // console.info("[zZzZz] current frame APD: ", id, apd, duration);
+          // console.info("[zfkun 🍕🅩🅕] current frame APD: ", id, apd, duration);
           if (apd > 1) {
             runtime.liveFrame = currentFrame;
 
@@ -90,7 +91,7 @@ const runtime = {
     return Promise.resolve(true);
   },
   stopQueue: async function () {
-    console.info("[zZzZz] stop queue: ", this.live);
+    console.info("[zfkun 🍕🅩🅕] stop queue: ", this.live);
     this.liveTimer = clearTimeout(this.liveTimer);
     this.live = 0;
     this.liveFrame = "";
@@ -117,7 +118,7 @@ const runtime = {
             resolve(true);
           })
           .catch((e) => {
-            console.info("[zZzZz] get display media fail: ", id, e);
+            console.info("[zfkun 🍕🅩🅕] get display media fail: ", id, e);
             resolve(false);
             if (e.message === "Permission denied by system") {
               alert(
@@ -128,7 +129,7 @@ const runtime = {
             }
           });
       } else {
-        console.info("[zZzZz] get display media not support: ", id);
+        console.info("[zfkun 🍕🅩🅕] get display media not support: ", id);
         alert("Error access screen content: your browser not support");
         resolve(false);
       }
@@ -164,7 +165,7 @@ const runtime = {
   },
   saveFrame: async function (id, video, update = false) {
     if (!this.screen[id]) {
-      console.info("[zZzZz] screen cache invalid: ", id);
+      console.info("[zfkun 🍕🅩🅕] screen cache invalid: ", id);
       return;
     }
 
@@ -199,7 +200,7 @@ const runtime = {
       if (update)
         this.screen[id].base64 = await this.blobToBase64(this.screen[id].blob);
     } catch (e) {
-      console.info("[zZzZz] video convert to blob fail: ", id, e);
+      console.info("[zfkun 🍕🅩🅕] video convert to blob fail: ", id, e);
     }
   },
 
@@ -376,7 +377,7 @@ const runtime = {
       const { type } = e;
 
       if (type === "mousedown") {
-        // console.info("[zZzZz] mousedown: ", e);
+        // console.info("[zfkun 🍕🅩🅕] mousedown: ", e);
         isDrag = true;
         startX = endX = Math.round(e.offsetX);
         startY = endY = Math.round(e.offsetY);
@@ -448,7 +449,7 @@ const runtime = {
   updateClipArea: function (nodeId, videoWidth, videoHeight) {
     const node = app.graph._nodes_by_id[nodeId];
     if (!node) {
-      console.info("[zZzZz] node not found: ", nodeId);
+      console.info("[zfkun 🍕🅩🅕] node not found: ", nodeId);
       return;
     }
 
@@ -465,12 +466,12 @@ const runtime = {
 
     const el = node.widgets.find((w) => w.name == WIDGET_NAME_PREVIEW)?.areaEl;
     if (!el) {
-      console.info("[zZzZz] preview area elment not found: ", nodeId);
+      console.info("[zfkun 🍕🅩🅕] preview area elment not found: ", nodeId);
       return;
     }
 
     if (!this.screen[nodeId]) {
-      console.info("[zZzZz] screen invalid: ", nodeId);
+      console.info("[zfkun 🍕🅩🅕] screen invalid: ", nodeId);
       return;
     }
 
@@ -480,7 +481,7 @@ const runtime = {
 
     // update preview
     const { x, y, w, h } = area;
-    console.info("[zZzZz] area info: ", area, app.graph);
+    console.info("[zfkun 🍕🅩🅕] area info: ", area, app.graph);
 
     const canvas = document.createElement("canvas");
     canvas.width = videoWidth;
@@ -583,7 +584,7 @@ app.registerExtension({
 
       this.addWidget(
         "button",
-        "Hide Preview", // Texto inicial
+        "Hide Preview",
         "",
         function (value, widget, node) {
           const parentEl = previewWidget.parentEl;
@@ -676,17 +677,16 @@ app.registerExtension({
             .translateSelf(NODE_WIDGET_MARGIN, ty + 2);
 
           Object.assign(this.parentEl.style, {
-              transformOrigin: "0 0",
-              transform: `translateX(-50%) translateY(1rem)`, // Centra horizontalmente y baja 10rem
-              left: "50%", // Coloca el visor en el centro horizontal
-              top: "0", // Parte superior relativa al nodo
-              cursor: "pointer",
-              position: "absolute",
-              zIndex: 10000,
-              maxWidth: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
-              width: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
+            transformOrigin: "0 0",
+            transform: `translateX(-50%) translateY(1rem)`,
+            left: "50%",
+            top: 0,
+            cursor: "pointer",
+            position: "absolute",
+            zIndex: 10000,
+            maxWidth: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
+            width: `${widget_width - NODE_WIDGET_MARGIN * 2}px`,
           });
-
 
           this.computedHeight = this.parentEl.getBoundingClientRect().height;
         },
