@@ -27,7 +27,7 @@ class EasyVideoOutputNode:
     RETURN_TYPES = ()
     FUNCTION = "load_image"
 
-    CATEGORY = "Easy Nodes"
+    CATEGORY = "zZzZz"
 
     def load_image(self, images):
         results = list()
