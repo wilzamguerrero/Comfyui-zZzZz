@@ -22,7 +22,7 @@ class EasyVideoOutput {
     panelEasyVideooutputBox.innerHTML = `
       <div class="easyVideoOperatePanel">
         <div style="color:#ffffff;font-size:12px;background-color: steelblue;">
-          Click three dots in the bottom right corner and select "Picture in Picture" after paly;
+          >>>>>>>> "Picture in Picture" after paly;
         </div>
         <button btnFunc="pictureInPicture" id="pictureInPictureBtn" style="display:none"     title="randerToCanvas">PictureInPicture</button>
       </div>
