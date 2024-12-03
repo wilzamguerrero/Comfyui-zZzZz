@@ -10,7 +10,7 @@ import { api } from "/scripts/api.js";
 
 
 // ================= CLASS PAINTER ================
-class EasyCapture {
+class CaptureZ {
   timer = null;
   constructor(node, devObj) {
     this.node = node;
@@ -338,7 +338,7 @@ class EasyCapture {
 
 
 // ================= CREATE PAINTER WIDGET ============
-function EasyCaptureerWidget(node, inputName, inputData, app) {
+function CaptureZerWidget(node, inputName, inputData, app) {
   node.name = inputName;
   const widget = {
     type: "easy_captureer_widget",
@@ -379,7 +379,7 @@ function EasyCaptureerWidget(node, inputName, inputData, app) {
     },
   };
   let devElmt = document.createElement("div");
-  node.capture = new EasyCapture(node, devElmt);
+  node.capture = new CaptureZ(node, devElmt);
   widget.painter_wrap = node.capture.devObj;
 
   widget.parent = node;
@@ -436,16 +436,16 @@ app.registerExtension({
     document.head.appendChild(style);
   },
   async setup(app) {
-    let EasyCaptureNode = app.graph._nodes.filter((wi) => wi.type == "easy_captureer_widget");
+    let CaptureZNode = app.graph._nodes.filter((wi) => wi.type == "easy_captureer_widget");
 
-    if (EasyCaptureNode.length) {
-      EasyCaptureNode.map((n) => {
-        console.log(`Setup EasyCaptureNode: ${n.name}`);
+    if (CaptureZNode.length) {
+      CaptureZNode.map((n) => {
+        console.log(`Setup CaptureZNode: ${n.name}`);
       });
     }
   },
   async beforeRegisterNodeDef(nodeType, nodeData, app) {
-    if (nodeData.name === "EasyCaptureNode") {
+    if (nodeData.name === "CaptureZNode") {
       // Create node
       const onNodeCreated = nodeType.prototype.onNodeCreated;
       nodeType.prototype.onNodeCreated = async function () {
@@ -453,13 +453,13 @@ app.registerExtension({
           ? onNodeCreated.apply(this, arguments)
           : undefined;
 
-        let EasyCaptureNode = app.graph._nodes.filter(
-            (wi) => wi.type == "EasyCaptureNode"
+        let CaptureZNode = app.graph._nodes.filter(
+            (wi) => wi.type == "CaptureZNode"
           ),
-          nodeName = `EasyCaptureNode_${EasyCaptureNode.length}`,
+          nodeName = `CaptureZNode_${CaptureZNode.length}`,
           nodeNamePNG = `${nodeName}.png`;
-        console.log(`Create EasyCaptureNode: ${nodeName}`);
-        EasyCaptureerWidget.apply(this, [this, nodeNamePNG, {}, app]);
+        console.log(`Create CaptureZNode: ${nodeName}`);
+        CaptureZerWidget.apply(this, [this, nodeNamePNG, {}, app]);
         this.setSize([500, 200]);
         return r;
       };

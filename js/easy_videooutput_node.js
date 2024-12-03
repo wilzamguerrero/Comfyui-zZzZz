@@ -9,7 +9,7 @@ import { app } from "/scripts/app.js";
 import { api } from "/scripts/api.js";
 
 // ================= CLASS PAINTER ================
-class EasyVideoOutput {
+class VideoZ {
   constructor(node, devObj) {
     this.node = node;
     // this.image = node.widgets.find((w) => w.name === "image");
@@ -18,8 +18,8 @@ class EasyVideoOutput {
   }
 
   makeElements() {
-    const panelEasyVideooutputBox = document.createElement("div");
-    panelEasyVideooutputBox.innerHTML = `
+    const panelVideoZBox = document.createElement("div");
+    panelVideoZBox.innerHTML = `
       <div class="easyVideoOperatePanel">
         <div style="color:#ffffff;font-size:12px;background-color: steelblue;">
           >>>>>>>>>> "Picture in Picture" after paly;
@@ -39,27 +39,27 @@ class EasyVideoOutput {
         height:60px;
         text-align:center;
       }
-      .panelEasyVideooutputBox div{
+      .panelVideoZBox div{
         box-sizing:border-box;
       }
       .easyVideoOperatePanel button{
         width:150px;height:20px
       }
-      .panelEasyVideooutputBox  .paramy{
+      .panelVideoZBox  .paramy{
         color:#ffffff;
         background:#68CCF0;
       }
-      .panelEasyVideooutputBox  .alert{
+      .panelVideoZBox  .alert{
         color:#ffffff;
         background:#F0A35D;
       }
     </style>
     `;
     // Main panelpaint box
-    panelEasyVideooutputBox.className = "panelEasyVideooutputBox";
-    this.panelEasyVideooutputBox = panelEasyVideooutputBox;
-    this.devObj.appendChild(panelEasyVideooutputBox);
-    this.func_box = panelEasyVideooutputBox.querySelector(
+    panelVideoZBox.className = "panelVideoZBox";
+    this.panelVideoZBox = panelVideoZBox;
+    this.devObj.appendChild(panelVideoZBox);
+    this.func_box = panelVideoZBox.querySelector(
       ".func_box"
     );
     this.bindEvents();
@@ -67,11 +67,11 @@ class EasyVideoOutput {
 
   bindEvents() {
     var that = this;
-    let videoOutput = this.panelEasyVideooutputBox.querySelectorAll(
+    let videoOutput = this.panelVideoZBox.querySelectorAll(
       ".easyvideo2"
     );
    
-    let pictureInPictureBtn = this.panelEasyVideooutputBox.querySelector(
+    let pictureInPictureBtn = this.panelVideoZBox.querySelector(
       "#pictureInPictureBtn"
     );
     pictureInPictureBtn.onclick = async (e) =>{
@@ -85,7 +85,7 @@ class EasyVideoOutput {
   //================= functions ================= 
 
   randerVideo(){
-    let videoOutput = this.panelEasyVideooutputBox.querySelector(
+    let videoOutput = this.panelVideoZBox.querySelector(
       "#easyvideo2"
     );
     let canvasObj = this.easycanvas;
@@ -117,7 +117,7 @@ function  base64ToBlob(data) {
 }
 
 // ================= CREATE PAINTER WIDGET ============
-function EasyVideoOutputWidget(node, inputName, inputData, app) {
+function VideoZWidget(node, inputName, inputData, app) {
   node.name = inputName;
   const widget = {
     type: "ez_videoOutput_widget",
@@ -158,7 +158,7 @@ function EasyVideoOutputWidget(node, inputName, inputData, app) {
     },
   };
   let devElmt = document.createElement("div");
-  node.capture = new EasyVideoOutput(node, devElmt);
+  node.capture = new VideoZ(node, devElmt);
   widget.painter_wrap = node.capture.devObj;
 
   widget.parent = node;
@@ -195,10 +195,10 @@ function EasyVideoOutputWidget(node, inputName, inputData, app) {
 
 // ================= CREATE EXTENSION ================
 app.registerExtension({
-  name: "Comfy.EasyVideoOutputNode",
+  name: "Comfy.VideoZNode",
   async init(app) {
     const style = document.createElement("style");
-    style.innerText = `.panelEasyVideooutputBox {
+    style.innerText = `.panelVideoZBox {
       position: absolute;
       width: 100%;
     }
@@ -206,16 +206,16 @@ app.registerExtension({
     document.head.appendChild(style);
   },
   async setup(app) {
-    let EasyVideoOutputNode = app.graph._nodes.filter((wi) => wi.type == "EasyVideoOutputNode");
+    let VideoZNode = app.graph._nodes.filter((wi) => wi.type == "VideoZNode");
 
-    if (EasyVideoOutputNode.length) {
-      EasyVideoOutputNode.map((n) => {
-        console.log(`Setup EasyVideoOutput: ${n.name}`);
+    if (VideoZNode.length) {
+      VideoZNode.map((n) => {
+        console.log(`Setup VideoZ: ${n.name}`);
       });
     }
   },
   async beforeRegisterNodeDef(nodeType, nodeData, app) {
-    if (nodeData.name === "EasyVideoOutputNode") {
+    if (nodeData.name === "VideoZNode") {
       // Create node
       const onNodeCreated = nodeType.prototype.onNodeCreated;
       nodeType.prototype.onNodeCreated = async function () {
@@ -223,13 +223,13 @@ app.registerExtension({
           ? onNodeCreated.apply(this, arguments)
           : undefined;
 
-        let EasyVideoOutputNode = app.graph._nodes.filter(
-            (wi) => wi.type == "EasyVideoOutputNode"
+        let VideoZNode = app.graph._nodes.filter(
+            (wi) => wi.type == "VideoZNode"
           ),
-          nodeName = `EasyVideoOutput_${EasyVideoOutputNode.length}`,
+          nodeName = `VideoZ_${VideoZNode.length}`,
           nodeNamePNG = `${nodeName}.png`;
-        console.log(`Create EasyVideoOutputNode: ${nodeName}`);
-        EasyVideoOutputWidget.apply(this, [this, nodeNamePNG, {}, app]);
+        console.log(`Create VideoZNode: ${nodeName}`);
+        VideoZWidget.apply(this, [this, nodeNamePNG, {}, app]);
         this.setSize([320, 430]);
         return r;
       };

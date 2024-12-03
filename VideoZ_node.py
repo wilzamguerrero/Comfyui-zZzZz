@@ -10,7 +10,7 @@ def log(*text):
 def tensor2pil(image):
     return Image.fromarray(np.clip(255. * image.cpu().numpy().squeeze(), 0, 255).astype(np.uint8))
 
-class EasyVideoOutputNode:
+class VideoZNode:
     '''Node to output image in a video tag '''
     def __init__(self) -> None:
         pass
@@ -49,10 +49,10 @@ class EasyVideoOutputNode:
 
 
 NODE_CLASS_MAPPINGS = {
-    "EasyVideoOutputNode": EasyVideoOutputNode,
+    "VideoZNode": VideoZNode,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "EasyVideoOutputNode": "output images as video and it can play Picture-in-Picture ",
+    "VideoZNode": "output images as video and it can play Picture-in-Picture ",
 }

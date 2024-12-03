@@ -12,7 +12,7 @@ from server import PromptServer, BinaryEventTypes
 def log(*text):
     print(''.join(map(str, text)))
 
-class EasyCaptureNode:
+class CaptureZNode:
     '''Node to load images directly from Krita or other external sources
     without needing to previously upload a file to inputs directory. Intended
     to be used in API only and not the web UI.'''
@@ -60,10 +60,10 @@ class EasyCaptureNode:
 
 
 NODE_CLASS_MAPPINGS = {
-    "EasyCaptureNode": EasyCaptureNode,
+    "CaptureZNode": CaptureZNode,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "EasyCaptureNode": "Capture screen and convert to base64 encoded image",
+    "CaptureZNode": "Capture screen and convert to base64 encoded image",
 }
