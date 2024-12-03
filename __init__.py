@@ -1,4 +1,5 @@
 import os
+from .utils_video import installNodes, NODE_CLASS_MAPPINGS as VIDEO_NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as VIDEO_NODE_DISPLAY_NAME_MAPPINGS
 from .utils import VERSION, ADDON_NAME, HOME_PATH, COMFY_WEB_EXTENSIONS_PATH, printColor, checkDir, addFilesToDir, load_config
 
 from .DownloadFileNode import DownloadFileNode
@@ -34,7 +35,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 }
 
 
-
 __version__ = VERSION
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
@@ -45,8 +45,7 @@ def install_nodes():
 
     checkDir(install_folder)
     addFilesToDir(js_folder, install_folder)
-
-printColor(f"boot start", "\033[1;35m")
+    
 load_config()
 install_nodes()
-printColor(f"boot end", "\033[1;35m")
+
