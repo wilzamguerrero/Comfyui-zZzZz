@@ -13,6 +13,21 @@ from threading import Timer
 from queue import Queue
 from multiprocessing import Process
 
+# Detección automática del entorno
+if 'COLAB_GPU' in os.environ:  # Google Colab
+    base_path = "/content"
+    print("Entorno detectado: Google Colab")
+elif os.path.exists('/kaggle'):  # Kaggle
+    base_path = "/kaggle/working"
+    print("Entorno detectado: Kaggle")
+elif os.path.exists('/teamspace'):  # Lightning AI
+    base_path = "/teamspace/studios/this_studio"
+    print("Entorno detectado: Lightning")
+else:
+    print("Entorno no detectado, seleccionando Google Colab por defecto.")
+    base_path = "/content"
+
+sdzc_path = os.path.join(base_path, "SDZC")
 
 class InfiniteZNode:
     @classmethod
@@ -26,7 +41,7 @@ class InfiniteZNode:
                     "step": 1,        
                     "display": "number"  
                 }),
-                "tunnel_option": (["LocalTunnel", "Serveo", "Cloudfl", "Zrok", "Localhost", "Pinggy"], {"default": "LocalTunnel"})
+                "tunnel_option": (["LocalPort", "LocalTunnel", "Serveo", "Cloudfl", "Zrok","Pinggy"], {"default": "LocalPort"})
             }
         }
 
@@ -60,7 +75,7 @@ class InfiniteZNode:
                 return self.zrok_tunnel(port)
             elif tunnel_option == "Pinggy":
                 return self.pinggy_tunnel(port)
-            elif tunnel_option == "Localhost":
+            elif tunnel_option == "LocalPort":
                 return self.localhost_tunnel(port)  
             else:
                 error_message = "Opción de túnel inválida."
@@ -135,7 +150,7 @@ class InfiniteZNode:
         def run_cloudfl(port, metrics_port, output_queue):
           
             atexit.register(lambda p: p.terminate(), subprocess.Popen(
-                ['/content/SDZC/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'],
+                [f'{sdzc_path}/cf', 'tunnel', '--url', f'http://127.0.0.1:{port}', '--metrics', f'127.0.0.1:{metrics_port}'],
                 stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             ))
             attempts, tunnel_url = 0, None
@@ -165,10 +180,10 @@ class InfiniteZNode:
 
     def zrok_tunnel(self, port):
         try:
-            os.chdir("/content/SDZC")
-            command = 'python /content/SDZC/app.py'
-            os.chmod('/content/SDZC/zrok', 0o777)
-            cmd = f'{command} & /content/SDZC/zrok share public http://localhost:{port} --headless'
+            os.chdir(sdzc_path)
+            command = f'python {os.path.join(sdzc_path, "app.py")} '
+            os.chmod(os.path.join(sdzc_path, 'zrok'), 0o777)
+            cmd = f'{command} & {os.path.join(sdzc_path, "zrok share public http://localhost:{port} --headless")} '
             subprocess.Popen(cmd, shell=True)
         
             return ("Revisa el output para la URL de Zrok",)
@@ -185,7 +200,7 @@ class InfiniteZNode:
             open(log_file, 'w').close()
 
             def run_app():
-                cmd = f"python /content/SDZC/app.py & ssh -o StrictHostKeyChecking=no -p 80 -R0:localhost:{port} a.pinggy.io"
+                cmd = f"python {os.path.join(sdzc_path, 'app.py')} & ssh -o StrictHostKeyChecking=no -p 80 -R0:localhost:{port} a.pinggy.io"
                 with open(log_file, 'w') as log:
                     process = subprocess.Popen(cmd, shell=True, stdout=log, stderr=subprocess.STDOUT)
                     process.wait()
@@ -220,13 +235,3 @@ class InfiniteZNode:
             error_message = f"Error: {e}"
             print(error_message)
             return (error_message,)
-
-
-
-
-
-
-
-
-
-
